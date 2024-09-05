@@ -1,0 +1,4 @@
+images_dir: '/home/lhernandez2/Venus_SAR/Dataset/verified_pairs/images'
+labels_dir: '/home/lhernandez2/Venus_SAR/Dataset/verified_pairs/masks'
+output_images_dir: '/home/lhernandez2/Venus_SAR/Dataset/preprocessed_images'
+output_labels_dir: '/home/lhernandez2/Venus_SAR/Dataset/preprocessed_labels'

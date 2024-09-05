@@ -1,0 +1,31 @@
+EPOCHS: 60
+ID2LABEL:
+  1: wridge
+  0: unknown
+LABEL2ID:
+  unknown: 0
+  wridge: 1
+label2color:
+  0: [0, 0, 0]
+  1: [0, 0, 0]
+  255: [255, 255, 255]
+PROJECTDIR: 'IMPACT'
+subproject: ''
+DATADIR: '/home/lhernandez2/Venus_SAR/Dataset/'
+SAVEROOT: '/home/lhernandez2/Venus_SAR/Dataset/Save/'
+IMGDIR: 'preprocessed_images'
+IFRAG: ''
+SEGDIR: 'preprocessed_labels'
+SFRAG: ''
+IMFIX: '.png'
+LABFIX: '.png'
+IMAGE_SIZE_X: 352
+IMAGE_SIZE_Y: 352
+THRESHOLD: 0.50
+RANDOM_SEED: 20240801
+LIMIT_DATASET: -1
+MODEL_NAME: 'facebook/maskformer-swin-base-ade'
+LEARNING_RATE: 5e-5
+BATCH_SIZE: 10
+ADE_MEAN: [0.43298103313041997, 0.43298103313041997, 0.43298103313041997]
+ADE_STD: [0.05168747987321793, 0.05168747987321793, 0.05168747987321793]

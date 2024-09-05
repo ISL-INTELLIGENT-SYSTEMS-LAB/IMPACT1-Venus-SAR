@@ -1,0 +1,9 @@
+DATADIR: '/home/lhernandez2/Venus_SAR/Dataset/'
+TEST_IMGDIR: 'preprocessed_images'
+TEST_SEGDIR: 'preprocessed_labels'
+IFRAG: ''
+SFRAG: ''
+IMFIX: '.png'
+LABFIX: '.png'
+MODEL_LOCATION: "/home/lhernandez2/Venus_SAR/Dataset/Save/weights_20240904_175943/"
+NUM_INFERENCES_SHOW: 3

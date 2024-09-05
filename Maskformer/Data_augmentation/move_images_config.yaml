@@ -1,0 +1,4 @@
+source_img_dir: 'msl/images/edr/'
+dest_img_dir: 'train_dataset/images/'
+source_label_dir: 'msl/labels/train/'
+dest_label_dir: 'train_dataset/labels/'
