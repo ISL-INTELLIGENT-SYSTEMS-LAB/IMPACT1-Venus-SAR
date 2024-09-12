@@ -1,3 +1,14 @@
+'''
+Fayetteville State University
+Inteliigent Systems Laboratory
+
+Authors:
+Taylor J. Brown
+Luis E. Hernandez
+
+idk what it does tbh i just got here
+'''
+
 # Modules for Mask2Former
 from transformers import AutoProcessor, AutoModelForUniversalSegmentation
 
@@ -6,6 +17,8 @@ from PIL import Image
 import seaborn as sns
 import warnings
 import logging
+import os
+from tqdm import tqdm
 
 import torch
 from torch.utils.data import Dataset
@@ -30,25 +43,33 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 
 class CustomDataset(Dataset):
-    def __init__(self, processor):
+    def __init__(self, image_dir, mask_dir, processor):
+        self.image_dir = image_dir
+        self.mask_dir = mask_dir
         self.processor = processor
-
+        self.image_files = sorted ([f for f in os.listdir(image_dir) if f.endswith('.png')])
+        self.mask_files = sorted ([f for f in os.listdir(mask_dir) if f.endswith('.png')])
+        
     def __getitem__(self, idx):
         # Load image
-        image = Image.open(r"C:\Users\forth\Desktop\MaskFormer2\data\verified_images\0_-1_BL.png").convert("RGB")
+        image_path = os.path.join(self.image_dir, self.image_files[idx])
+        image = Image.open(image_path).convert('RGB')
+        #image = Image.open("/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_images/0_-1_BL.png").convert("RGB")
         
         # Resize the image to a smaller size, e.g., 352x352
         image = image.resize((352, 352), Image.LANCZOS)
 
         # Load the grayscale semantic segmentation map
-        mask = Image.open(r"C:\Users\forth\Desktop\MaskFormer2\data\verified_labels\0_-1_BL.png").convert("L")
+        mask_path = os.path.join(self.mask_dir, self.mask_files[idx])
+        mask = Image.open(mask_path).convert('L')
+        #mask = Image.open("/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_labels/0_-1_BL.png").convert("L")
         mask = mask.resize((352, 352), Image.NEAREST)
         mask = np.array(mask)
 
         # Debugging: Check the dimensions and unique labels
-        #print(f"Image shape: {np.array(image).shape}")
-        #print(f"Mask shape: {mask.shape}")
-        #print(f"Unique labels in mask: {np.unique(mask)}")
+        print(f"Image shape: {np.array(image).shape}")
+        print(f"Mask shape: {mask.shape}")
+        print(f"Unique labels in mask: {np.unique(mask)}")
 
         # Ensure the image and segmentation map have the correct dimensions
         assert image.size == (352, 352), "Image size mismatch!"
@@ -61,9 +82,10 @@ class CustomDataset(Dataset):
         return inputs
 
     def __len__(self):
-        return 2
+        return len(self.image_files)
 
-print("CustomDataset Class Defined")
+
+print("Dataset Class Defined")
 
 
 def draw_semantic_segmentation(segmentation):
@@ -97,7 +119,7 @@ def draw_semantic_segmentation(segmentation):
         handles.append(mpatches.Patch(color=color, label=label))
 
     ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left')
-    plt.savefig(r"metrics\\segmentation_map.png")
+    plt.savefig("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/segment_map.png")
     #plt.show()
 
 def plot_confusion_matrix(y_true, y_pred, class_labels):
@@ -113,7 +135,7 @@ def plot_confusion_matrix(y_true, y_pred, class_labels):
     ax.set_title('Confusion Matrix (Pixel Counts)')
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
-    plt.savefig(r"metrics\\confusion_matrix_pixel_counts.png")
+    plt.savefig("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/confusion_matrix_pixel_counts.png")
     #plt.show()
 
     # Compute confusion matrix (percentages)
@@ -125,7 +147,7 @@ def plot_confusion_matrix(y_true, y_pred, class_labels):
     ax.set_title('Confusion Matrix (Percentage)')
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
-    plt.savefig(r"metrics\\confusion_matrix.png")
+    plt.savefig("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/confusion_matrix.png")
     #plt.show()
 
 def plot_confidence_matrix(confidences, y_true, y_pred, class_labels):
@@ -142,7 +164,7 @@ def plot_confidence_matrix(confidences, y_true, y_pred, class_labels):
     ax.set_title('Confidence Matrix')
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
-    plt.savefig(r"metrics\\confidence_matrix.png")
+    plt.savefig("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/confidence_matrix.png")
     #plt.show()
 
 def plot_precision_recall_curve(y_true, y_pred_proba, class_labels):
@@ -159,7 +181,7 @@ def plot_precision_recall_curve(y_true, y_pred_proba, class_labels):
     plt.ylabel('Precision')
     plt.title('Precision-Recall Curve')
     plt.legend(loc='best')
-    plt.savefig(r"metrics\\precision_recall_curve.png")
+    plt.savefig("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/precision_recall_curve.png")
     #plt.show()
     
 def plot_roc_curve(y_true, y_pred_proba, class_labels):
@@ -178,22 +200,24 @@ def plot_roc_curve(y_true, y_pred_proba, class_labels):
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
     plt.legend(loc='best')
-    plt.savefig(r"metrics\\roc_curve.png")
+    plt.savefig("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/roc_curve.png")
     #plt.show()
 
 print("Functions Defined")
 
 
 # Create the processor and model
-processor = AutoProcessor.from_pretrained("shi-labs/oneformer_coco_swin_large")
+processor = AutoProcessor.from_pretrained("/home/lhernandez2/Venus_SAR/Maskformer2/model/models--shi-labs--oneformer_coco_swin_large/snapshots/3a263017ca5c75adbea145f25f81b118243d4394/")
 processor.image_processor.size = (352, 352)
 processor.image_processor.do_resize = False
-model = AutoModelForUniversalSegmentation.from_pretrained("shi-labs/oneformer_coco_swin_large", is_training=True)
+model = AutoModelForUniversalSegmentation.from_pretrained("/home/lhernandez2/Venus_SAR/Maskformer2/model/models--shi-labs--oneformer_coco_swin_large/snapshots/3a263017ca5c75adbea145f25f81b118243d4394/", is_training=True)
 processor.image_processor.num_text = model.config.num_queries - model.config.text_encoder_n_ctx
 print("Processor and Model Created")
 
 # Create the dataset
-dataset = CustomDataset(processor)
+image_dir = "/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_images/"
+mask_dir = "/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_labels/"
+dataset = CustomDataset(image_dir, mask_dir, processor)
 print("Dataset Created")
 
 """# Load the first example and print its shape
@@ -221,14 +245,14 @@ unnormalized_image = np.moveaxis(unnormalized_image, 0, -1)
 # Display the image
 colorimg = Image.fromarray(unnormalized_image)
 #colorimg.show()
-colorimg.save(r"metrics\\image.png")
+colorimg.save("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/image.png")
 
 # Display the mask
 idx = 0
 visual_mask = (batch["mask_labels"][0][idx].bool().numpy() * 255).astype(np.uint8)
 maskimg = Image.fromarray(visual_mask)
 #maskimg.show()
-maskimg.save(r"metrics\\mask.png")
+maskimg.save("/home/lhernandez2/Venus_SAR/Maskformer2/metrics/mask.png")
 
 # Declare the optimizer
 optimizer = AdamW(model.parameters(), lr=5e-5)
@@ -237,10 +261,15 @@ optimizer = AdamW(model.parameters(), lr=5e-5)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Train the model
+no_epoch = 1
 model.train()
 model.to(device)
-for epoch in range(20):  # Loop over the dataset multiple times
-    for batch in dataloader:
+for epoch in range(no_epoch):  # Loop over the dataset multiple times
+    print(f'Epoch {epoch+1}/{no_epoch}')
+    
+    progbar = tqdm(dataloader, desc= 'Training', leave = False)
+    
+    for batch in progbar:
         # Zero the parameter gradients
         optimizer.zero_grad()
 
@@ -255,6 +284,8 @@ for epoch in range(20):  # Loop over the dataset multiple times
         print("Loss:", loss.item())
         loss.backward()
         optimizer.step()
+        
+        progbar.set_postfix({'Loss': loss.item()})
 
 print("Finished Training")
 
@@ -265,7 +296,7 @@ model.eval()
 model.model.is_training = False
 
 # Load the image
-image = Image.open(r"C:\Users\forth\Desktop\MaskFormer2\data\verified_images\0_-1_BR.png")
+image = Image.open("/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_images/0_-1_BR.png")
 image = image.resize((352, 352), Image.LANCZOS)
 
 # Prepare image for the model
@@ -274,10 +305,10 @@ inputs = processor(images=image, task_inputs=["semantic"], return_tensors="pt")
 # Check if CUDA is available and move model and inputs to the appropriate device
 inputs = {k: v.to(device) for k, v in inputs.items()}
 
-"""# Verify the shapes of the inputs
+# Verify the shapes of the inputs
 for k, v in inputs.items():
     if isinstance(v, torch.Tensor):
-        print(f"{k}: {v.shape}")"""
+        print(f"{k}: {v.shape}")
 
 # Forward pass (no need for gradients at inference time)
 with torch.no_grad():
@@ -290,7 +321,7 @@ y_pred_proba = torch.softmax(outputs.masks_queries_logits, dim=1)
 semantic_segmentation = y_pred_proba.argmax(dim=1)  # Choose the class with the highest probability
 
 # Resize the predicted segmentation to match the ground truth size
-ground_truth_segmentation = Image.open(r"C:\Users\forth\Desktop\MaskFormer2\data\verified_labels\0_-1_BR.png")
+ground_truth_segmentation = Image.open("/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_labels/0_-1_BR.png")
 ground_truth_segmentation = ground_truth_segmentation.resize((352, 352), Image.NEAREST)  # Ensure it matches the size of the input
 ground_truth_segmentation = torch.tensor(np.array(ground_truth_segmentation), dtype=torch.long)
 
@@ -318,5 +349,5 @@ class_labels = [0, 1]
 # Now, plot the metrics with custom labels
 plot_confusion_matrix(true_labels, pred_labels, class_labels)
 plot_confidence_matrix(confidences, true_labels, pred_labels, class_labels)
-plot_precision_recall_curve(ground_truth_segmentation.cpu().numpy(), y_pred_proba.cpu().numpy(), class_labels)
-plot_roc_curve(ground_truth_segmentation.cpu().numpy(), y_pred_proba.cpu().numpy(), class_labels)
+#plot_precision_recall_curve(ground_truth_segmentation.cpu().numpy(), y_pred_proba.cpu().numpy(), class_labels)
+#plot_roc_curve(ground_truth_segmentation.cpu().numpy(), y_pred_proba.cpu().numpy(), class_labels)

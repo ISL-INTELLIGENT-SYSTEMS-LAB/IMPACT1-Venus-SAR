@@ -3,8 +3,8 @@ import numpy as np
 from PIL import Image
 
 # Define the directories where the images and masks are stored
-image_dir = r"C:\Users\forth\Desktop\MaskFormer2\data\preprocessed_images"
-mask_dir = r"C:\Users\forth\Desktop\MaskFormer2\data\preprocessed_labels"
+image_dir = r"/home/lhernandez2/Venus_SAR/Dataset/preprocessed_images/"
+mask_dir = r"/home/lhernandez2/Venus_SAR/Dataset/preprocessed_labels/"
 
 # Define the target size
 target_size = (352, 352)
@@ -35,8 +35,8 @@ for image_file, mask_file in zip(image_files, mask_files):
     mask = mask.resize(target_size, Image.NEAREST)
 
     # Save the resized image and mask (overwriting the originals or in a new directory)
-    image.save(r"C:\Users\forth\Desktop\MaskFormer2\data\verified_images\\" + image_file)
-    mask.save(r"C:\Users\forth\Desktop\MaskFormer2\data\verified_labels\\" + mask_file)
+    image.save(r"/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_images/" + image_file)
+    mask.save(r"/home/lhernandez2/Venus_SAR/Maskformer2/verified_data/verified_labels/" + mask_file)
 
     # Debugging: Print the shapes to ensure they match
     print(f"Processed {image_file} and {mask_file}: {image.size} == {mask.size}")
