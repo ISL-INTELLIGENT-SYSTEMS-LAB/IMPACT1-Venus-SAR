@@ -2,4 +2,8 @@ venv/
 *.png
 *.bin
 *.safetensors
-Maskformer2/model/
+Dataset/Save/results_train_20240926_094012/
+Dataset/Save/weights_train_20240919_210031/
+Dataset/Save/weights_train_20240926_094012/
+Dataset/Save/weights_train_20240926_095359/
+
