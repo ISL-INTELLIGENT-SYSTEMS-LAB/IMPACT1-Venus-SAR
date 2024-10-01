@@ -1,4 +1,4 @@
-EPOCHS: 60
+EPOCHS: 200 
 ID2LABEL:
   1: wridge
   0: unknown
@@ -13,9 +13,11 @@ PROJECTDIR: 'IMPACT'
 subproject: ''
 DATADIR: '/home/lhernandez2/Venus_SAR/Dataset/'
 SAVEROOT: '/home/lhernandez2/Venus_SAR/Dataset/Save/'
-IMGDIR: 'preprocessed_images'
+IMGDIR_TRG: 'training_images'
+IMGDIR_VAL: 'val_images'
 IFRAG: ''
-SEGDIR: 'preprocessed_labels'
+SEGDIR_TRG: 'training_labels'
+SEGDIR_VAL: 'val_labels'
 SFRAG: ''
 IMFIX: '.png'
 LABFIX: '.png'
