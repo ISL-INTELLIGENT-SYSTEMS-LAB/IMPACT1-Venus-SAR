@@ -1,0 +1,68 @@
+{
+  "_name_or_path": "/home/lhernandez2/Venus_SAR/Maskformer/Model/",
+  "architectures": [
+    "MaskFormerForInstanceSegmentation"
+  ],
+  "backbone": null,
+  "backbone_config": {
+    "depths": [
+      2,
+      2,
+      18,
+      2
+    ],
+    "drop_path_rate": 0.3,
+    "embed_dim": 128,
+    "encoder_stride": 32,
+    "hidden_size": 1024,
+    "image_size": 384,
+    "in_channels": 3,
+    "model_type": "maskformer-swin",
+    "num_heads": [
+      4,
+      8,
+      16,
+      32
+    ],
+    "out_features": [
+      "stage1",
+      "stage2",
+      "stage3",
+      "stage4"
+    ],
+    "out_indices": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "path_norm": true,
+    "pretrain_img_size": 384,
+    "window_size": 12
+  },
+  "backbone_kwargs": null,
+  "ce_weight": 1.0,
+  "cross_entropy_weight": 1.0,
+  "decoder_config": {
+    "max_position_embeddings": 1024,
+    "model_type": "detr",
+    "scale_embedding": false
+  },
+  "dice_weight": 1.0,
+  "fpn_feature_size": 256,
+  "init_std": 0.02,
+  "init_xavier_std": 1.0,
+  "mask_feature_size": 256,
+  "mask_weight": 20.0,
+  "model_type": "maskformer",
+  "no_object_weight": 0.1,
+  "num_attention_heads": 8,
+  "num_hidden_layers": 6,
+  "num_queries": 100,
+  "output_auxiliary_logits": null,
+  "torch_dtype": "float32",
+  "transformers_version": "4.44.2",
+  "use_auxiliary_loss": false,
+  "use_pretrained_backbone": false,
+  "use_timm_backbone": false
+}

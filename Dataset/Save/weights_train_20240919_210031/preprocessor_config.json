@@ -1,0 +1,45 @@
+{
+  "_max_size": 1333,
+  "_valid_processor_keys": [
+    "images",
+    "segmentation_maps",
+    "instance_id_to_semantic_id",
+    "do_resize",
+    "size",
+    "size_divisor",
+    "resample",
+    "do_rescale",
+    "rescale_factor",
+    "do_normalize",
+    "image_mean",
+    "image_std",
+    "ignore_index",
+    "do_reduce_labels",
+    "return_tensors",
+    "data_format",
+    "input_data_format"
+  ],
+  "do_normalize": true,
+  "do_reduce_labels": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "ignore_index": 255,
+  "image_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "image_processor_type": "MaskFormerImageProcessor",
+  "image_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "resample": 2,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "height": 352,
+    "width": 352
+  },
+  "size_divisor": 32
+}

@@ -1,0 +1,5 @@
+## To Do:
+1) Generate plots for training images and segmentation masks
+2) Add plots for ROC curve, PR curve, and radar plot
+3) Reorganizing project directory
+4) Clean up training script
